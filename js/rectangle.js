@@ -13,3 +13,22 @@ Rectangle.prototype.draw = function(ctx){
   ctx.fill();
   ctx.closePath();
 }
+
+Rectangle.prototype.drawWithBorder = function(ctx, width, borderColor){
+  ctx.fillStyle = this.color;
+  ctx.beginPath();
+  ctx.rect(this.paramX,this.paramY,this.width,this.height);
+  ctx.fill();
+  ctx.closePath();
+  ctx.lineWidth = width;
+  ctx.strokeStyle = borderColor;
+  ctx.stroke();
+}
+
+Rectangle.prototype.getParamX = function(){
+  return this.paramX;
+}
+
+Rectangle.prototype.getParamY = function(){
+  return this.paramY;
+}

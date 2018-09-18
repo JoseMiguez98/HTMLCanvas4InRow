@@ -1,5 +1,6 @@
 "use strict";
 
+//----------------------------Functions---------------------------------------//
 
 function getMousePos(event){
   let mouseX = event.layerX - event.currentTarget.offsetLeft;
@@ -17,16 +18,16 @@ function drawTokensCounter(tokens_number, ctx){
   ctx.fillText(tokens_number,10,35);
 }
 
-
-
 window.onload = function(){
+  //--------------------------Inicialize variables----------------------------//
   let canvas = document.getElementById('canvas');
   let ctx = canvas.getContext('2d');
   let drag = false;
   let token = new Circle(40,canvas.height-30,20,'green');
   let aux_token = token;
   let tokens_number = 21;
-
+  let board = new Board();
+  board.draw(ctx);
   // //Generate tokens
   // for (let i = 0; i < 21; i++) {
   //   let token = new Circle(40,canvas.height-30,20,'green');
@@ -39,7 +40,7 @@ window.onload = function(){
   //Draw tokens counter
   drawTokensCounter(tokens_number, ctx)
 
-  //Drag tokens
+  //---------------------Drag tokens--------------------//
   canvas.onmousedown = function(e){
     if(token.isClicked(getMousePos(e).x,getMousePos(e).y)){
       drag = true;
@@ -55,9 +56,6 @@ window.onload = function(){
         //Dibujo una nueva ficha
         token.draw(ctx);
         aux_token = token;
-      }
-      if(getMousePos(e).x > canvas.width/2){
-        alert("Paso la mitad");
       }
       drawTokensCounter(tokens_number, ctx);
     }
