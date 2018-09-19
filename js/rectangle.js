@@ -32,3 +32,11 @@ Rectangle.prototype.getParamX = function(){
 Rectangle.prototype.getParamY = function(){
   return this.paramY;
 }
+
+Rectangle.prototype.getWidth = function(){
+  return this.width;
+}
+
+Rectangle.prototype.getHeight = function(){
+  return this.height;
+}

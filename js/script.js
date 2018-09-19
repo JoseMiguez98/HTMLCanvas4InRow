@@ -34,24 +34,16 @@ window.onload = function(){
   let canvas = document.getElementById('canvas');
   let ctx = canvas.getContext('2d');
   let drag = false;
-  let token = new Circle(40,canvas.height-30,20,'green');
+  let token = new Circle(40,canvas.height-30,25,'green');
   let aux_token = token;
   let tokens_number = 21;
   let board = new Board();
-  board.draw(ctx);
-  // //Generate tokens
-  // for (let i = 0; i < 21; i++) {
-  //   let token = new Circle(40,canvas.height-30,20,'green');
-  //   tokens[i] = token;
-  // }
-  //
-  //Draw first token
+
+  //--------------------------Draw First Screen-------------------------------//
   token.draw(ctx);
-
-  //Draw tokens counter
-  drawTokensCounter(tokens_number, ctx)
-
-  //---------------------Drag tokens--------------------//
+  board.draw(ctx);
+  drawTokensCounter(tokens_number, ctx);
+  //--------------------------Drag tokens-------------------------------------//
   canvas.onmousedown = function(e){
     if(token.isClicked(getMousePos(e).x,getMousePos(e).y)){
       drag = true;
