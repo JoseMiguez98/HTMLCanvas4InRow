@@ -1,10 +1,13 @@
-function Board(){
-  this.structure = this.generateGameBoard();
+function Board(ctx){
+  this.structure = this.generateGameBoard(ctx);
   this.dropZone = this.generateDropZone();
 }
 
-Board.prototype.generateGameBoard = function(){
-  let rect = new Rectangle(canvas.width/3.3,canvas.height/5,485,400,"rgb(0,0,240)");
+Board.prototype.generateGameBoard = function(ctx){
+  let gradient_style = ctx.createLinearGradient(canvas.width/3.3,canvas.height/5,canvas.width/3.3,canvas.height/5+400);
+  gradient_style.addColorStop(0,"black");
+  gradient_style.addColorStop(1,"blue");
+  let rect = new Rectangle(canvas.width/3.3,canvas.height/5,485,400,gradient_style);
   let fields = [];
   let x_dif = 65;
   let y_dif = 60;
@@ -51,6 +54,23 @@ Board.prototype.draw=function(ctx){
     }
   }
   this.dropZone.draw(ctx);
+}
+
+Board.prototype.isInDropzone=function(mousePos){
+  let x0 = this.dropZone.getParamX();
+  let x1 = x0+this.dropZone.getWidth();
+  let y0 = this.dropZone.getParamY();
+  let y1 = y0+this.dropZone.getHeight();
+
+  return (mousePos.x>x0&&mousePos.x<x1)&&(mousePos.y>y0&&mousePos.y<y1);
+}
+
+Board.prototype.getSize = function(){
+  let sum = 0;
+  for(let i = 0; i<this.structure.fields.length ; i++){
+    sum += this.structure.fields[i].length;
+  }
+  return sum;
 }
 
 Board.prototype.getParamX = function(){

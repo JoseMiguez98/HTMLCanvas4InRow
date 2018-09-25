@@ -55,3 +55,15 @@ Circle.prototype.getParamX = function(){
 Circle.prototype.getParamY = function(){
   return this.paramY;
 }
+
+Circle.prototype.getXY = function(){
+  return {
+    "x": this.getParamX(),
+    "y": this.getParamY()
+  };
+}
+
+Circle.prototype.setXY = function(_x,_y){
+  this.paramX = _x;
+  this.paramY = _y;
+}
