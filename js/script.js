@@ -1,7 +1,6 @@
 "use strict";
 
 //----------------------------Functions---------------------------------------//
-
 function getMousePos(event){
   let mouseX = event.layerX - event.currentTarget.offsetLeft;
   let mouseY = event.layerY - event.currentTarget.offsetTop;
@@ -11,12 +10,17 @@ function getMousePos(event){
     "y": mouseY
   };
 }
-
+function drawGameTitle(canvas,ctx){
+  ctx.font = "80px Jokerman";
+  ctx.fillStyle = "orange";
+  ctx.fillText("4 in a Row",canvas.width/2.9,canvas.height/8);
+}
 function reDrawCanvas(canvas,ctx,board,players){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   board.draw(ctx);
   players[0].drawTokenBox(ctx);
   players[1].drawTokenBox(ctx);
+  drawGameTitle(canvas,ctx);
 }
 
 window.onload = function(){
@@ -45,6 +49,7 @@ window.onload = function(){
   board.draw(ctx);
   jugador1.drawTokenBox(ctx);
   jugador2.drawTokenBox(ctx);
+  drawGameTitle(canvas,ctx);
   //--------------------------Drag tokens-------------------------------------//
 
   canvas.onmousedown = function(e){
