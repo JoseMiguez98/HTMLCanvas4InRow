@@ -1,5 +1,6 @@
 function Board(ctx){
   this.structure = this.generateGameBoard(ctx);
+  this.columns = this.generateColumnsArray();
   this.dropZone = this.generateDropZone();
 }
 
@@ -12,7 +13,7 @@ Board.prototype.generateGameBoard = function(ctx){
   let x_dif = 65;
   let y_dif = 60;
   let x0 = 47;
-  let y0 = 50;
+  let y0 = 51;
   let xtemp = x0;
   let ytemp = y0;
 
@@ -34,12 +35,20 @@ Board.prototype.generateGameBoard = function(ctx){
   };
 }
 
+Board.prototype.generateColumnsArray = function(){
+  let columns = [];
+  for (let i = 0; i < 7; i++) {
+    columns[i] = (this.structure.rectangle.getWidth()/7)*i;
+  }
+  return columns
+}
+
 Board.prototype.generateDropZone = function(){
   let dx = this.structure.rectangle.getParamX();
   let dy = this.structure.rectangle.getParamY()-80;
   let width = this.structure.rectangle.getWidth();
   let height = this.structure.rectangle.getParamY()-dy;
-  let color = "rgba(255,0,0,0.5)";
+  let color = "rgba(0,0,0,0)";
   return new Rectangle(dx,dy,width,height,color);
 }
 
@@ -71,6 +80,59 @@ Board.prototype.getSize = function(){
     sum += this.structure.fields[i].length;
   }
   return sum;
+}
+
+Board.prototype.getColumn = function(mousePos){
+  mousePos.x = mousePos.x - this.structure.rectangle.getParamX();
+  for (let i = 0; i < this.columns.length-1; i++) {
+    if(mousePos.x>this.columns[i] && mousePos.x<this.columns[i+1]){
+      return i;
+    }
+  }
+  return this.columns.length-1;
+}
+
+Board.prototype.getAvailableField = function(column){
+  for (let i = this.structure.fields.length-1; i >= 0; i--) {
+    console.log(i);
+    if(this.structure.fields[i][column].getState() == 0){
+      return this.structure.fields[i][column];
+    }
+  }
+  return -1;
+}
+
+Board.prototype.isWinner = function(){
+  //Check rows
+  for(let i = 0 ; i<this.structure.fields.length ; i++){
+    for(let j = 0; j<4 ; j++){
+      if(this.structure.fields[i][j].getState()!=0){
+        let f1 = this.structure.fields[i][j].getState();
+        let f2 = this.structure.fields[i][j+1].getState();
+        let f3 = this.structure.fields[i][j+2].getState();
+        let f4 = this.structure.fields[i][j+3].getState();
+        if(f1===f2&&f2===f3&&f3===f4){
+          return true;
+        }
+      }
+    }
+  }
+  //Check columns
+  for(let i = 0 ; i<7 ; i++){
+    for(let j = 0; j<3 ; j++){
+      if(this.structure.fields[j][i].getState()!=0){
+        let f1 = this.structure.fields[j][i].getState();
+        let f2 = this.structure.fields[j+1][i].getState();
+        let f3 = this.structure.fields[j+2][i].getState();
+        let f4 = this.structure.fields[j+3][i].getState();
+        if(f1==f2&&f2==f3&&f3==f4){
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
 }
 
 Board.prototype.getParamX = function(){

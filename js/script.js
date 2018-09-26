@@ -12,12 +12,7 @@ function getMousePos(event){
   };
 }
 
-// function radioToCM(radio){
-//   let radioToCmEquivalent = 0.044;
-//   return radio*radioToCmEquivalent;
-// }
-
-function reDrawCanvas(mousePos,canvas,ctx,board,players){
+function reDrawCanvas(canvas,ctx,board,players){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   board.draw(ctx);
   players[0].drawTokenBox(ctx);
@@ -30,6 +25,7 @@ window.onload = function(){
   let canvas = document.getElementById('canvas');
   let ctx = canvas.getContext('2d');
   let drag = false;
+  let turn = 1;
   let board = new Board(ctx);
   let jugador1 = new Player(1,"Player 1", "red");
   let jugador2 = new Player(2,"Player 2", "yellow ");
@@ -50,35 +46,72 @@ window.onload = function(){
   jugador1.drawTokenBox(ctx);
   jugador2.drawTokenBox(ctx);
   //--------------------------Drag tokens-------------------------------------//
+
   canvas.onmousedown = function(e){
     let mousePos = getMousePos(e);
     for(let i=0;i<7;i++){
       for (let j=0;j<3;j++) {
-        if(jugador1.tokenBox.fields[i][j].isClicked(mousePos.x,mousePos.y)){
-          drag = true;
-          clicked_token = jugador1.tokenBox.fields[i][j];
-          clicked_token_init_pos = jugador1.tokenBox.fields[i][j].getXY();
+        if(turn==1){
+          if(jugador1.tokenBox.fields[i][j].isClicked(mousePos.x,mousePos.y)){
+            drag = true;
+            clicked_token = jugador1.tokenBox.fields[i][j];
+            clicked_token_init_pos = jugador1.tokenBox.fields[i][j].getXY();
+          }
         }
-        if(jugador2.tokenBox.fields[i][j].isClicked(mousePos.x,mousePos.y)){
-          drag = true;
-          clicked_token = jugador2.tokenBox.fields[i][j];
-          clicked_token_init_pos = jugador2.tokenBox.fields[i][j].getXY();
+        else{
+          if(jugador2.tokenBox.fields[i][j].isClicked(mousePos.x,mousePos.y)){
+            drag = true;
+            clicked_token = jugador2.tokenBox.fields[i][j];
+            clicked_token_init_pos = jugador2.tokenBox.fields[i][j].getXY();
+          }
         }
       }
     }
   }
-
+//---------------------------Drop Token---------------------------------------//
   canvas.onmouseup = function(e){
     if(drag){
       let mousePos = getMousePos(e);
       drag = false;
-       if(board.isInDropzone(mousePos)){
-         clicked_token.setXY(-100,-100);
-       }
-       else{
-         clicked_token.setXY(clicked_token_init_pos.x,clicked_token_init_pos.y);
-       }
-      reDrawCanvas(mousePos,canvas,ctx,board,[jugador1, jugador2]);
+      if(board.isInDropzone(mousePos)){
+        let drop_column = board.getColumn(mousePos);
+        let field = board.getAvailableField(drop_column);
+        if(field != -1){
+          field.setState(turn);
+          clicked_token.setXY(field.getParamX(),field.getParamY());
+          clicked_token.setNotClickable();
+          if(board.isWinner()){
+            let winner = turn;
+            //Modal
+            $( function() {
+              $("#winnerMessage").html("<p>Player "+winner+" ha ganado la partida!");
+              $("#winnerMessage").dialog({
+                modal: true,
+                buttons: {
+                  "Nuevo Juego": function() {
+                    location.reload();
+                  }
+                }
+              });
+              for(let i=0;i<7;i++){
+                for (let j=0;j<3;j++) {
+                  jugador1.tokenBox.fields[i][j].setNotClickable();
+                  jugador2.tokenBox.fields[i][j].setNotClickable();
+                }
+              }
+            });
+            //
+          }
+          turn=(turn==1)?2:1;
+        }
+        else{
+          clicked_token.setXY(clicked_token_init_pos.x,clicked_token_init_pos.y);
+        }
+      }
+      else{
+        clicked_token.setXY(clicked_token_init_pos.x,clicked_token_init_pos.y);
+      }
+      reDrawCanvas(canvas,ctx,board,[jugador1, jugador2]);
     }
   }
 
@@ -86,7 +119,7 @@ window.onload = function(){
     if(drag){
       let mousePos = getMousePos(e);
       clicked_token.setXY(mousePos.x,mousePos.y);
-      reDrawCanvas(mousePos,canvas,ctx,board,[jugador1, jugador2]);
+      reDrawCanvas(canvas,ctx,board,[jugador1, jugador2]);
     }
   }
 }

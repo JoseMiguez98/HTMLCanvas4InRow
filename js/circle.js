@@ -40,6 +40,12 @@ Circle.prototype.drawOn = function(ctx, mouseX, mouseY){
   ctx.closePath();
 }
 
+Circle.prototype.setNotClickable = function(){
+  this.isClicked = function(){
+    return false;
+  }
+}
+
 Circle.prototype.getRadio = function(){
   return this.radio;
 }
