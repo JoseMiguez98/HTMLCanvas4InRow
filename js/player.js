@@ -1,9 +1,10 @@
-function Player(_playerNumber, _alias, _tokenColor){
+function Player(_playerNumber, _alias, _tokenColor, _focus){
   this.playerNumber = _playerNumber;
   this.alias = _alias;
   this.tokenBox = this.generateTokens();
   this.tokenColor = _tokenColor;
   this.boxColor;
+  this.focus = _focus;
 }
 
 Player.prototype.generateTokens = function(){
@@ -46,6 +47,15 @@ Player.prototype.drawName =  function(ctx){
 Player.prototype.drawTokenBox = function(ctx){
   let rect = this.tokenBox.rectangle;
   let fields = this.tokenBox.fields;
+  if(this.focus){
+    rect.setColor(this.boxColor);
+  }
+  else{
+    let gradient = ctx.createLinearGradient(this.tokenBox.rectangle.getParamX(),this.tokenBox.rectangle.getParamY(),this.tokenBox.rectangle.getParamX(),this.tokenBox.rectangle.getParamY()+455)
+    gradient.addColorStop(0,"black");
+    gradient.addColorStop(1,"gray");
+    rect.setColor(gradient);
+  }
   rect.draw(ctx);
   this.drawName(ctx);
 
@@ -69,4 +79,9 @@ Player.prototype.getTokens = function(){
     }
   }
   return tokens;
+}
+
+Player.prototype.switchFocus = function(){
+  this.focus = !this.focus;
+  console.log("Player "+this.playerNumber+": "+this.focus);
 }

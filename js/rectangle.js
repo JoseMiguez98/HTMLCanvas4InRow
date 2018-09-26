@@ -40,3 +40,7 @@ Rectangle.prototype.getWidth = function(){
 Rectangle.prototype.getHeight = function(){
   return this.height;
 }
+
+Rectangle.prototype.setColor = function(_color){
+  this.color = _color;
+}

@@ -31,8 +31,8 @@ window.onload = function(){
   let drag = false;
   let turn = 1;
   let board = new Board(ctx);
-  let jugador1 = new Player(1,"Player 1", "red");
-  let jugador2 = new Player(2,"Player 2", "yellow ");
+  let jugador1 = new Player(1,"Player 1", "red",true);
+  let jugador2 = new Player(2,"Player 2", "yellow",false);
   let clicked_token;
   let clicked_token_init_pos;
 
@@ -108,6 +108,8 @@ window.onload = function(){
             //
           }
           turn=(turn==1)?2:1;
+          jugador1.switchFocus();
+          jugador2.switchFocus();
         }
         else{
           clicked_token.setXY(clicked_token_init_pos.x,clicked_token_init_pos.y);
