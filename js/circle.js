@@ -32,13 +32,13 @@ Circle.prototype.isClicked = function(mouseX, mouseY){
   return distance<=this.radio;
 }
 
-Circle.prototype.drawOn = function(ctx, mouseX, mouseY){
-  ctx.fillStyle = this.color;
-  ctx.beginPath();
-  ctx.arc(mouseX,mouseY,this.radio,0,Math.PI*2);
-  ctx.fill();
-  ctx.closePath();
-}
+// Circle.prototype.drawOn = function(ctx, mouseX, mouseY){
+//   ctx.fillStyle = this.color;
+//   ctx.beginPath();
+//   ctx.arc(mouseX,mouseY,this.radio,0,Math.PI*2);
+//   ctx.fill();
+//   ctx.closePath();
+// }
 
 Circle.prototype.setNotClickable = function(){
   this.isClicked = function(){

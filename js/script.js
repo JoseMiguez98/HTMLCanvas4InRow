@@ -31,8 +31,12 @@ window.onload = function(){
   let drag = false;
   let turn = 1;
   let board = new Board(ctx);
-  let jugador1 = new Player(1,"Player 1", "red",true);
-  let jugador2 = new Player(2,"Player 2", "yellow",false);
+  let token_p1 = new Image();
+  let token_p2 = new Image();
+  token_p1.src = "img/token_p1.gif";
+  token_p2.src = "img/token_p2.gif";
+  let jugador1 = new Player(1,"Player 1",token_p1,true);
+  let jugador2 = new Player(2,"Player 2",token_p2,false);
   let clicked_token;
   let clicked_token_init_pos;
 

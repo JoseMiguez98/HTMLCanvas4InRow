@@ -1,8 +1,8 @@
-function Player(_playerNumber, _alias, _tokenColor, _focus){
+function Player(_playerNumber, _alias, _tokenIMG, _focus){
   this.playerNumber = _playerNumber;
   this.alias = _alias;
   this.tokenBox = this.generateTokens();
-  this.tokenColor = _tokenColor;
+  this.tokenIMG = _tokenIMG;
   this.boxColor;
   this.focus = _focus;
 }
@@ -23,7 +23,7 @@ Player.prototype.generateTokens = function(){
   for (let i=0;i<7;i++){
     let row = [];
     for (let j=0;j<3;j++){
-      let field = new Field(rect.getParamX()+xtemp,rect.getParamY()+ytemp,25,this.tokenColor);
+      let field = new Circle(rect.getParamX()+xtemp,rect.getParamY()+ytemp,25,'black');
       row.push(field);
       xtemp+=x_dif;
     }
@@ -62,6 +62,7 @@ Player.prototype.drawTokenBox = function(ctx){
   for(let i=0;i<fields.length;i++){
     for(let j=0;j<fields[0].length;j++){
       fields[i][j].draw(ctx);
+      ctx.drawImage(this.tokenIMG,fields[i][j].getParamX()-24,fields[i][j].getParamY()-24)
     }
   }
 }
